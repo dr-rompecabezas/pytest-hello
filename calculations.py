@@ -19,6 +19,10 @@ def add_string(a: str, b: str):
     return int(a) + int(b)
 
 
+class InsufficientFunds(Exception):
+    pass
+
+
 class BankAccount:
 
     def __init__(self, initial_balance=0):
@@ -29,6 +33,8 @@ class BankAccount:
         return self.balance
 
     def withdraw(self, amount):
+        if amount > self.balance:
+            raise InsufficientFunds("Insufficient funds")
         self.balance -= amount
         return self.balance
 
@@ -47,12 +53,9 @@ class BankAccount:
         self.deposit(amount)
         other_account.withdraw(amount)
         return self.balance
-    
+
     def __add__(self, other_account):
         return self.balance + other_account.balance
-    
-    def __sub__(self, other_account):
-        return self.balance - other_account.balance
 
     def interest(self, rate):
         return self.balance * rate
